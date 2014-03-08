@@ -1,19 +1,24 @@
 package colors;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class Vec2D {
 	
 	public final int x, y;
+	private int salt;
+	
+	private static final long seed = System.currentTimeMillis();
 	
 	public Vec2D(int x, int y) {
 		this.x = x;
 		this.y = y;
+		salt = new Random(seed ^ ((long)x ^ y)).nextInt();
 	}
 	
 	@Override
 	public int hashCode() {
-		return x^(y<<16);
+		return (x^(y<<16))^salt;
 	}
 	
 	@Override
