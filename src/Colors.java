@@ -26,7 +26,7 @@ public class Colors {
 	
 	public static void main(String[] args) {
 		long s=System.currentTimeMillis();
-		final BufferedImage img = createImage(new MinimizeMinDiff(), WIDTH, HEIGHT, NUMCOLORS, STARTX, STARTY);
+		final BufferedImage img = createImage(new RandomOrdering(0), new MinimizeMinDiff(), WIDTH, HEIGHT, NUMCOLORS, STARTX, STARTY);
 		long f=System.currentTimeMillis();
 		System.out.println("Time taken: " + ((f-s)/1000.0) + " seconds");
 		
@@ -58,12 +58,11 @@ public class Colors {
 		frame.setVisible(true);
 	}
 	
-	public static BufferedImage createImage(PixelDiff pDiff, int width, int height, int nColors, int startX, int startY) {
-		Integer[] colors = new Integer[nColors*nColors*nColors];
+	public static BufferedImage createImage(ColorOrdering ordering, PixelDiff pDiff, int width, int height, int nColors, int startX, int startY) {
+		assert width*height == nColors*nColors*nColors;
+		int[] colors = new int[nColors*nColors*nColors];
 		int[] pixels = new int[width*height];
-		assert pixels.length == colors.length;
 		
-		// Randomize the color order
 		int q = 0;
 		for(int i=0; i < nColors; i++) {
 			for(int j=0; j < nColors; j++) {
@@ -75,19 +74,9 @@ public class Colors {
 				}
 			}
 		}
-		final Random r = new Random(0);
-		for(int i=0; i < colors.length; i++) {
-			int j = r.nextInt(colors.length - i) + i;
-			int temp = colors[i];
-			colors[i] = colors[j];
-			colors[j] = temp;
-		}
-		/*Arrays.sort(colors, new Comparator<Integer>() {
-			@Override
-			public int compare(Integer o1, Integer o2) {
-				return coldiff(o1, o2);
-			}
-		});*/
+		ordering.order(colors);
+		assert colors != null;
+		assert colors.length == nColors*nColors*nColors;
 		
 		HashSet<Vec2D> available = new HashSet<>();
 		
