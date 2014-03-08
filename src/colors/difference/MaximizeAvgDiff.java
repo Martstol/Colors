@@ -1,8 +1,11 @@
+package colors.difference;
 import java.util.HashSet;
 import java.util.List;
 
+import colors.Vec2D;
 
-public class MinimizeAvgDiff extends PixelDiff {
+
+public class MaximizeAvgDiff extends PixelDiff {
 	
 	public float avg(List<Integer> list) {
 		if(list.isEmpty()) throw new IllegalArgumentException("Cannot calculate the average of an empty list");
@@ -19,12 +22,12 @@ public class MinimizeAvgDiff extends PixelDiff {
 	@Override
 	public Vec2D calcPos(int[] pixels, int width, int height, HashSet<Vec2D> available, int color) {
 		Vec2D bestPos = null;
-		float bestVal = Float.POSITIVE_INFINITY;
+		float bestVal = -1;
 		
 		for(Vec2D pos : available) {
 			List<Integer> list = colorDifferences(pixels, width, height, pos, color);
 			float val = avg(list);
-			if(val < bestVal) {
+			if(val > bestVal) {
 				bestPos = pos;
 				bestVal = val;
 			}

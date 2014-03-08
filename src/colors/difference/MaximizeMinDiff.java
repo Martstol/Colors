@@ -1,7 +1,12 @@
+package colors.difference;
+
 import java.util.HashSet;
 import java.util.List;
 
-public class MinimizeMinDiff extends PixelDiff {
+import colors.Vec2D;
+
+
+public class MaximizeMinDiff extends PixelDiff {
 	
 	public int min(List<Integer> list) {
 		if(list.isEmpty()) throw new IllegalArgumentException("Cannot find the smallest element in an empty list");
@@ -20,16 +25,18 @@ public class MinimizeMinDiff extends PixelDiff {
 	@Override
 	public Vec2D calcPos(int[] pixels, int width, int height, HashSet<Vec2D> available, int color) {
 		Vec2D bestPos = null;
-		int bestVal = Integer.MAX_VALUE;
+		int bestVal = -1;
 		
 		for(Vec2D pos : available) {
-			List<Integer> list = colorDifferences(pixels, width, height, pos, color);
-			int val = min(list);
-			if(val < bestVal) {
+			List<Integer> diffs = colorDifferences(pixels, width, height, pos, color);
+			int diff = min(diffs);
+			if(diff > bestVal) {
+				bestVal = diff;
 				bestPos = pos;
-				bestVal = val;
 			}
 		}
+		
+		assert bestPos != null;
 		
 		return bestPos;
 	}

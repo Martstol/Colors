@@ -1,3 +1,4 @@
+package colors;
 import java.awt.BorderLayout;
 import java.awt.Canvas;
 import java.awt.Dimension;
@@ -6,10 +7,12 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashSet;
-import java.util.Random;
 
 import javax.imageio.ImageIO;
 import javax.swing.JFrame;
+
+import colors.difference.*;
+import colors.ordering.*;
 
 /*
  * Optimized Java implementation of this: http://codegolf.stackexchange.com/questions/22144/images-with-all-colors/22326#22326
@@ -26,7 +29,7 @@ public class Colors {
 	
 	public static void main(String[] args) {
 		long s=System.currentTimeMillis();
-		final BufferedImage img = createImage(new RandomOrdering(0), new MinimizeMinDiff(), WIDTH, HEIGHT, NUMCOLORS, STARTX, STARTY);
+		final BufferedImage img = createImage(new ColorDiffOrdering(), new MaximizeMinDiff(), WIDTH, HEIGHT, NUMCOLORS, STARTX, STARTY);
 		long f=System.currentTimeMillis();
 		System.out.println("Time taken: " + ((f-s)/1000.0) + " seconds");
 		
@@ -41,6 +44,8 @@ public class Colors {
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
 		Canvas c = new Canvas() {
+			private static final long serialVersionUID = 1L;
+
 			public void paint(Graphics g) {
 				super.paint(g);
 				g.drawImage(img, 0, 0, getWidth(), getHeight(), null);

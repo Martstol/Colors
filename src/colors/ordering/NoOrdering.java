@@ -1,3 +1,4 @@
+package colors.ordering;
 
 public class NoOrdering extends ColorOrdering {
 

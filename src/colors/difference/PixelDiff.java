@@ -1,6 +1,9 @@
+package colors.difference;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+
+import colors.Vec2D;
 
 
 public abstract class PixelDiff {
