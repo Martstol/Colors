@@ -29,7 +29,8 @@ public class Colors {
 	
 	public static void main(String[] args) {
 		long s=System.currentTimeMillis();
-		final BufferedImage img = createImage(new ColorDiffOrdering(), new MaximizeMaxDiff(), WIDTH, HEIGHT, NUMCOLORS, STARTX, STARTY);
+		//final BufferedImage img = createImage(new ColorDiffOrdering(), new MaximizeMaxDiff(), WIDTH, HEIGHT, NUMCOLORS, STARTX, STARTY);
+		final BufferedImage img = createImage(new ColorDiffOrdering(), new MaximizeMaxDiff(), 2048, 1024, 128, 1024, 512);
 		long f=System.currentTimeMillis();
 		System.out.println("Time taken: " + ((f-s)/1000.0) + " seconds");
 		
@@ -94,7 +95,7 @@ public class Colors {
 			}
 		}
 		
-		int progressCounter = colors.length / 16;
+		int progressCounter = colors.length / 64;
 		for(int i = 1; i < colors.length; i++) {
 			int color = colors[i];
 			
@@ -114,9 +115,10 @@ public class Colors {
 			}
 			
 			if((i+1) == progressCounter) {
-				System.out.println("Status: " + (progressCounter / (float)colors.length));
-				progressCounter += colors.length / 16;
+				System.out.println("Status: " + ((progressCounter / (float)colors.length))*100 + " %");
+				progressCounter += colors.length / 64;
 			}
+			Thread.yield();
 			
 		}
 		assert available.size() == 0;
