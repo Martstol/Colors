@@ -25,7 +25,10 @@ public class Colors {
 	public static final int STARTY = 64;
 	
 	public static void main(String[] args) {
+		long s=System.currentTimeMillis();
 		final BufferedImage img = createImage(new MinimizeMinDiff(), WIDTH, HEIGHT, NUMCOLORS, STARTX, STARTY);
+		long f=System.currentTimeMillis();
+		System.out.println("Time taken: " + ((f-s)/1000.0) + " seconds");
 		
 		try {
 			ImageIO.write(img, "png", new File("output.png"));
@@ -40,7 +43,7 @@ public class Colors {
 		Canvas c = new Canvas() {
 			public void paint(Graphics g) {
 				super.paint(g);
-				g.drawImage(img, 0, 0, frame.getWidth(), frame.getHeight(), null);
+				g.drawImage(img, 0, 0, getWidth(), getHeight(), null);
 			}
 		};
 		Dimension d = new Dimension(WIDTH, HEIGHT);
@@ -72,7 +75,7 @@ public class Colors {
 				}
 			}
 		}
-		final Random r = new Random(System.currentTimeMillis());
+		final Random r = new Random(0);
 		for(int i=0; i < colors.length; i++) {
 			int j = r.nextInt(colors.length - i) + i;
 			int temp = colors[i];
@@ -97,6 +100,7 @@ public class Colors {
 			}
 		}
 		
+		int progressCounter = colors.length / 16;
 		for(int i = 1; i < colors.length; i++) {
 			int color = colors[i];
 			
@@ -114,6 +118,12 @@ public class Colors {
 					available.add(n);
 				}
 			}
+			
+			if((i+1) == progressCounter) {
+				System.out.println("Status: " + (progressCounter / (float)colors.length));
+				progressCounter += colors.length / 16;
+			}
+			
 		}
 		assert available.size() == 0;
 		
