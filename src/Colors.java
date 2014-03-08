@@ -29,17 +29,25 @@ public class Colors {
 	
 	public static void main(String[] args) {
 		final BufferedImage img = createImage();
+		
+		try {
+			ImageIO.write(img, "png", new File("output.png"));
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}
+		
 		final JFrame frame = new JFrame();
 		frame.setLayout(new BorderLayout());
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setPreferredSize(new Dimension(WIDTH, HEIGHT));
+		
 		frame.add(new Canvas() {
-			@Override
 			public void paint(Graphics g) {
 				super.paint(g);
 				g.drawImage(img, 0, 0, frame.getWidth(), frame.getHeight(), null);
 			}
 		}, BorderLayout.CENTER);
+		
 		frame.pack();
 		frame.setLocationRelativeTo(null);
 		frame.setVisible(true);
@@ -107,19 +115,9 @@ public class Colors {
 			
 			// Adjust the available list
 			available.remove(bestPos);
-			for(Vec2D nPos : getNeighbors(bestPos)) {
+			for(Vec2D nPos : bestPos.getNeighbors(WIDTH, HEIGHT)) {
 				if(pixels[nPos.y*WIDTH + nPos.x] == 0x00000000) {
 					available.add(nPos);
-				}
-			}
-			
-			if(i % (colors.length/16) == 0 || i == colors.length-1) {
-				BufferedImage img = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_ARGB);
-				img.setRGB(0, 0, WIDTH, HEIGHT, pixels, 0, WIDTH);
-				try {
-					ImageIO.write(img, "png", new File(String.format("out%08d.png", i)));
-				} catch (IOException e) {
-					throw new RuntimeException(e);
 				}
 			}
 			
@@ -130,31 +128,6 @@ public class Colors {
 		img.setRGB(0, 0, WIDTH, HEIGHT, pixels, 0, WIDTH);
 		
 		return img;
-	}
-	
-	public static int coldiff(int c1, int c2) {
-		int r = ((c1 & 0x00FF0000) >> 16) - ((c2 & 0x00FF0000) >> 16); 
-		int g = ((c1 & 0x0000FF00) >> 8) - ((c2 & 0x0000FF00) >> 8);
-		int b = ((c1 & 0x000000FF) >> 0) - ((c2 & 0x000000FF) >> 0);
-		return r*r + g*g + b*b;
-	}
-	
-	public static List<Vec2D> getNeighbors(Vec2D p) {
-		List<Vec2D> neighbors = new ArrayList<>(8);
-		
-		for(int dy = -1; dy <= 1; dy++) {
-			int y = p.y+dy;
-			if(y >= 0 && y < HEIGHT) {
-				for(int dx = -1; dx <= 1; dx++) {
-					int x = p.x+dx;
-					if(x >= 0 && x < WIDTH) {
-						neighbors.add(new Vec2D(x, y));
-					}
-				}
-			}
-		}
-		
-		return neighbors;
 	}
 	
 	public static int average(List<Integer> l) {
@@ -181,10 +154,10 @@ public class Colors {
 	
 	public static int calcdiff(int[] pixels, Vec2D p, int c) {
 		List<Integer> diffs = new ArrayList<>(8);
-		for(Vec2D np : getNeighbors(p)) {
+		for(Vec2D np : p.getNeighbors(WIDTH, HEIGHT)) {
 			int nc = pixels[np.y*WIDTH+np.x];
 			if(nc != 0x00000000) {
-				diffs.add(coldiff(nc, c));
+				diffs.add(PixelDifference.coldiff(nc, c));
 			}
 		}
 		
