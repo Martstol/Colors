@@ -95,7 +95,7 @@ public class ColorsOld {
 						bestPos = pos;
 					}
 				}
-				assert bestVal != Integer.MAX_VALUE;
+				assert bestVal != -1;
 			}
 
 			// Put the pixel where it belong
