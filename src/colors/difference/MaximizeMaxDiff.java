@@ -6,20 +6,18 @@ import java.util.List;
 import colors.Vec2D;
 
 
-public class MaximizeMinDiff extends PixelDiff {
+public class MaximizeMaxDiff extends PixelDiff {
 	
-	public int min(List<Integer> list) {
-		if(list.isEmpty()) throw new IllegalArgumentException("Cannot find the smallest element in an empty list");
+	public int max(List<Integer> l) {
+		if(l.isEmpty()) throw new IllegalArgumentException("Cannot find the smallest element in an empty list");
 		
-		int min = list.get(0);
-		
-		for(int i=1; i < list.size(); i++) {
-			if(list.get(i) < min) {
-				min = list.get(i);
+		int max = l.get(0);
+		for(int i=1; i<l.size(); i++) {
+			if(l.get(i) > max) {
+				max = l.get(i);
 			}
 		}
-		
-		return min;
+		return max;
 	}
 
 	@Override
@@ -29,7 +27,7 @@ public class MaximizeMinDiff extends PixelDiff {
 		
 		for(Vec2D pos : available) {
 			List<Integer> diffs = colorDifferences(pixels, width, height, pos, color);
-			int diff = min(diffs);
+			int diff = max(diffs);
 			if(diff > bestVal) {
 				bestVal = diff;
 				bestPos = pos;

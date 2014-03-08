@@ -29,7 +29,7 @@ public class Colors {
 	
 	public static void main(String[] args) {
 		long s=System.currentTimeMillis();
-		final BufferedImage img = createImage(new ColorDiffOrdering(), new MaximizeMinDiff(), WIDTH, HEIGHT, NUMCOLORS, STARTX, STARTY);
+		final BufferedImage img = createImage(new ColorDiffOrdering(), new MaximizeMaxDiff(), WIDTH, HEIGHT, NUMCOLORS, STARTX, STARTY);
 		long f=System.currentTimeMillis();
 		System.out.println("Time taken: " + ((f-s)/1000.0) + " seconds");
 		

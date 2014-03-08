@@ -45,5 +45,10 @@ public class Vec2D {
 		
 		return neighbors;
 	}
+	
+	@Override
+	public String toString() {
+		return "[" + x + ", " + y + "]";
+	}
 
 }
