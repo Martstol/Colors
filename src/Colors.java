@@ -70,7 +70,7 @@ public class Colors {
 				}
 			}
 		}
-		final Random r = new Random(System.nanoTime());
+		final Random r = new Random(System.currentTimeMillis());
 		for(int i=0; i < colors.length; i++) {
 			int j = r.nextInt(colors.length - i) + i;
 			int temp = colors[i];
@@ -88,6 +88,7 @@ public class Colors {
 		HashSet<Vec2D> available = new HashSet<>();
 		
 		// Loop through all the colors that we want to place
+		int progressCounter = colors.length / 16;
 		for(int i = 0; i < colors.length; i++) {
 			int c = colors[i];
 			
@@ -119,6 +120,11 @@ public class Colors {
 				if(pixels[nPos.y*WIDTH + nPos.x] == 0x00000000) {
 					available.add(nPos);
 				}
+			}
+			
+			if((i+1) == progressCounter) {
+				System.out.println("Status: " + (progressCounter / (float)colors.length));
+				progressCounter += colors.length / 16;
 			}
 			
 		}
